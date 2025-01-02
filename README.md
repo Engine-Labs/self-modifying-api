@@ -1,76 +1,72 @@
 # Self Modifying API
 
-WARNING: PLEASE DO NOT USE THIS IN REAL LIFE - PROOF OF CONCEPT ONLY
+⚠️ **SECURITY WARNING** ⚠️
 
-## What is this
+**THIS IS A PROOF OF CONCEPT ONLY - DO NOT USE IN PRODUCTION**
 
-This is an attempt to make an API that can accept POST requests that result in
-changes to its own codebase and therefore its own API surface.
+This project allows arbitrary code execution through its API endpoints. Deploying this to the internet would create severe security vulnerabilities. This project is intended for educational and experimental purposes only.
 
-In its current state, this is VERY DANGEROUS to deploy anywhere to the internet.
+## Project Overview
 
-The core of this API is a single POST request handler which:
+The Self Modifying API is an experimental FastAPI application that can modify its own codebase and API surface through HTTP requests. It demonstrates a unique approach to dynamic API modification where the API can accept POST requests that result in changes to its own functionality.
 
-1. Accepts some Python code as a string
-   1. We expect to be in a particular format - see `healthcheck.py` for reference
-2. Commits the code to a file in its own GitHub repo
+### Key Features
+
+- Accepts Python code through POST requests
+- Automatically creates new API endpoints from submitted code
+- Self-modifying codebase through GitHub integration
+- Automatic deployment updates (via Render)
+- GPT/OpenAI Assistant API integration capabilities
+
+### How It Works
+
+The core functionality revolves around a single POST request handler that:
+
+1. Accepts Python code as a string (following a specific format)
+2. Commits the code to its own GitHub repository
 3. Updates `app.py` to expose the new route in the API
-4. Triggers a new deployment (we used Render because we're familiar with it)
+4. Triggers a new deployment automatically
 
-## WHY??
+## Prerequisites
 
-We had a half-baked idea that this might work well with GPTs/OpenAI's Assistants API
-to allow a GPT to bootstrap its own actions.
+- Python 3.7+
+- Git
+- FastAPI understanding
+- Access to GitHub repository
+- Render.com account (for deployment)
 
-It turns out that GPTs do not dynamically import API documentation from a provided URL,
-so this doesn't really work without having to reload the actions every time a
-new endpoint is created.
+## Installation & Setup
 
-For details on GPT configuration, see below.
+1. Clone the repository:
+   ```bash
+   git clone [repository-url]
+   cd self-modifying-api
+   ```
 
-## Usage and installation
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-This is FastAPI project, so install dependencies from `requirements.txt` and
-run `./bin/dev` to start the development server locally.
+3. Start the development server:
+   ```bash
+   ./bin/dev
+   ```
 
-## Using this API with a GPT
+## Usage
 
-We tested using this API as a backend for GPT actions. The configuration we used is below.
+The API accepts POST requests with Python code that defines new endpoints. The code must follow a specific format:
 
-Name: `API Builder`
+```python
+from fastapi import APIRouter
+router = APIRouter()
 
-Description: `Make API endpoints on the fly`
+@router.get("/your-endpoint")
+def your_function():
+    return {"your": "response"}
+```
 
-Instructions:
-
-    You make API endpoints by writing Python code for a FastAPI backend. An example of the code you might write is:
-
-    ```python
-    from fastapi import APIRouter
-    router = APIRouter()
-    @router.get("/test")
-    def test():
-        return {"status": "test"}
-    ```
-
-    for which, you would use the filepath "test.py", for example.
-
-    Make sure to always use
-
-    ```python
-    from fastapi import APIRouter
-    router = APIRouter()
-    ```
-
-    when you make new endpoints.
-
-Actions were imported from the `/openai.json` endpoint exposed by the FastAPI server, but we
-had to manually add our server URL to the document to make the actions work.
-
-### Example:
-![](self-modifying-gpt.png)
-
-Request sent to backend:
+### Example Request
 
 ```json
 {
@@ -79,7 +75,61 @@ Request sent to backend:
 }
 ```
 
-## Known limitations
+## GPT Integration
 
-New dependencies are not currently handled (e.g. if some Python code for a new endpoint
-uses numpy, we don't try to install missing dependencies).
+This API can be integrated with GPT/OpenAI's Assistant API. While the original intention was to allow GPTs to bootstrap their own actions, current limitations in GPT's dynamic API documentation import affect full functionality.
+
+### GPT Configuration
+
+- **Name**: `API Builder`
+- **Description**: `Make API endpoints on the fly`
+- **Instructions**:
+```
+You make API endpoints by writing Python code for a FastAPI backend. Always use:
+
+from fastapi import APIRouter
+router = APIRouter()
+
+when creating new endpoints.
+```
+
+### Integration Setup
+
+1. The API exposes endpoint documentation via `/openai.json`
+2. Server URL must be manually added to GPT configuration
+3. Actions need to be reloaded when new endpoints are created
+
+### Example Integration
+![](self-modifying-gpt.png)
+
+## Known Limitations
+
+- No automatic handling of new dependencies (e.g., if new endpoint requires numpy)
+- GPTs don't dynamically import API documentation
+- Manual reload required for new endpoints in GPT configuration
+- Security considerations for arbitrary code execution
+
+## Contributing
+
+While this is a proof of concept, contributions that improve security, add features, or fix bugs are welcome. Please ensure you:
+
+1. Create an issue first to discuss changes
+2. Follow existing code style
+3. Add appropriate tests
+4. Update documentation
+
+## License
+
+This project is intended for educational purposes. See the LICENSE file for details.
+
+## Security Considerations
+
+This project intentionally allows arbitrary code execution, which is extremely dangerous in a production environment. Key risks include:
+
+- Remote code execution
+- Server compromise
+- Data exposure
+- Resource exhaustion
+- Network security vulnerabilities
+
+**DO NOT deploy this application to any public-facing environment.**
