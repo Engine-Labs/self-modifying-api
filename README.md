@@ -33,6 +33,8 @@ For details on GPT configuration, see below.
 This is FastAPI project, so install dependencies from `requirements.txt` and
 run `./bin/dev` to start the development server locally.
 
+For a comprehensive development setup guide and troubleshooting tips, see [DEVELOPMENT.md](./DEVELOPMENT.md).
+
 ## Using this API with a GPT
 
 We tested using this API as a backend for GPT actions. The configuration we used is below.
