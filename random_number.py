@@ -1,7 +1,9 @@
-from fastapi import APIRouter
 import random
 
+from fastapi import APIRouter
+
 router = APIRouter()
+
 
 @router.get("/random-number")
 def generate_random_number():
