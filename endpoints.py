@@ -3,7 +3,8 @@ import json
 import os
 
 import requests
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
+from fastapi import HTTPException
 from pydantic import BaseModel
 
 RENDER_SERVICE_ID = os.getenv("RENDER_SERVICE_ID")
@@ -67,9 +68,7 @@ def commit_to_github(file_content: str, path: str, token: str, repo: str, owner:
     app_py_content += f"\nimport {import_name}\n"
     app_py_content += f"\napp.include_router({import_name}.router)\n"
 
-    update_response = update_file(
-        "app.py", app_py_content, app_py_sha, token, repo, owner
-    )
+    update_response = update_file("app.py", app_py_content, app_py_sha, token, repo, owner)
 
     return {
         "update_response": update_response,

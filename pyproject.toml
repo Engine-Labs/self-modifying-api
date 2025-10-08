@@ -1,0 +1,28 @@
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+exclude = "(.*/\\.git|.*/\\.venv|/build|/dist)"
+
+[tool.ruff]
+line-length = 100
+exclude = [
+    ".git",
+    ".venv",
+    "build",
+    "dist",
+]
+
+[tool.ruff.lint]
+# Enable Flake8-like rules (E, F), isort (I), and enable a few other common ones
+select = ["E", "F"]
+ignore = ["E501", "W292"] # E501: Line too long, handled by Black; W292: No newline at end of file (Black handles this)
+
+[tool.ruff.lint.isort]
+known-first-party = []
+combine-as-imports = true
+
+[tool.isort]
+profile = "black"
+line_length = 100
+force_single_line = true
+known_first_party = []
