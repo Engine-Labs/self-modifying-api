@@ -1,3 +1,5 @@
+English | [Italiano](README.it.md)
+
 # Self Modifying API
 
 WARNING: PLEASE DO NOT USE THIS IN REAL LIFE - PROOF OF CONCEPT ONLY
