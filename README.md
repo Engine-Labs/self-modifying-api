@@ -1,5 +1,7 @@
 # Self Modifying API
 
+[Version française](./README_fr.md)
+
 WARNING: PLEASE DO NOT USE THIS IN REAL LIFE - PROOF OF CONCEPT ONLY
 
 ## What is this
